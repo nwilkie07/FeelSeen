@@ -67,7 +67,7 @@ export const Login = () => {
         {loading ? (
           <ActivityIndicator size={"large"} />
         ) : (
-          <View style={{ padding: 16, gap: 8 }}>
+          <View style={{ padding: 8, gap: 8 }}>
             <Button title="Sign In" onPress={signIn} color={"blue"} />
             <Button title="Sign Up" onPress={signUp} color={"blue"} />
           </View>

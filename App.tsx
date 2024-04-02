@@ -20,15 +20,18 @@ export default function App() {
   },[]);
 
   return (
+    <View style={{display: "flex", height: `${100}%`}}>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
         {user === null ? <Stack.Screen 
         name="Login"
         component={Login}
         options={{headerShown: false}}
-        /> : <Stack.Screen name="Home" component={HomeScreen} options={{title: "Home"}} />}
+        /> : <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}} />}
       </Stack.Navigator>
     </NavigationContainer>
+    <Text>Footer Goes Here</Text>
+    </View>
   );
 }
 
