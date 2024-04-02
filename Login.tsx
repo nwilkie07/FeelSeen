@@ -5,6 +5,8 @@ import {
   ActivityIndicator,
   Button,
   KeyboardAvoidingView,
+  ImageBackground,
+  Image
 } from "react-native";
 import React, { useState } from "react";
 import { FIREBASE_AUTH } from "./firebase.config";
@@ -12,6 +14,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -25,7 +28,6 @@ export const Login = () => {
       const response = await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
       console.log(error);
-      alert("Sign in failed" + error.message);
     } finally {
       setLoading(false);
     }
@@ -47,17 +49,16 @@ export const Login = () => {
   };
 
   return (
-    <View>
-      <KeyboardAvoidingView>
-        <Text>Login</Text>
+    <SafeAreaView style={{display: "flex", flex: 1, backgroundColor: "white", paddingTop: 24}} >
+      <KeyboardAvoidingView style={{marginTop: "auto", marginBottom: "auto"}}>
         <TextInput
-          style={{ height: 60, paddingBottom: 16 }}
+          style={{ height: 40, margin: 8, paddingLeft: 8, backgroundColor: "white", borderColor: "grey", borderStyle: "solid", borderWidth: 1 }}
           placeholder="Email"
           onChangeText={(text) => setEmail(text)}
           value={email}
         />
         <TextInput
-          style={{ height: 60 }}
+          style={{ height: 40, margin: 8, paddingLeft: 8, backgroundColor: "white", borderColor: "grey", borderStyle: "solid", borderWidth: 1  }}
           placeholder="Password"
           onChangeText={(text) => setPassword(text)}
           value={password}
@@ -66,12 +67,14 @@ export const Login = () => {
         {loading ? (
           <ActivityIndicator size={"large"} />
         ) : (
-          <>
-            <Button title="Sign In" onPress={signIn} />
-            <Button title="Sign Up" onPress={signUp} />
-          </>
+          <View style={{ padding: 16, gap: 8 }}>
+            <Button title="Sign In" onPress={signIn} color={"blue"} />
+            <Button title="Sign Up" onPress={signUp} color={"blue"} />
+          </View>
         )}
+      
       </KeyboardAvoidingView>
-    </View>
+    </SafeAreaView>
+    
   );
 };
