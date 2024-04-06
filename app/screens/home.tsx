@@ -3,9 +3,11 @@ import React, { useState } from "react";
 import { FIREBASE_AUTH  } from "../../firebase.config";
 import {Calendar, ExpandableCalendar, CalendarProvider, DateData} from 'react-native-calendars';
 import { SafeAreaView } from "react-native-safe-area-context";
+import { dbConnection } from "../../database/dbconnection";
 
 export const HomeScreen = () => {
    const today = new Date();
+   dbConnection();
 
  return (<CalendarProvider date={today.toDateString()}><SafeAreaView style={{display: "flex", height: `${100}%` ,flexDirection: "column"}}>
    <ExpandableCalendar></ExpandableCalendar>

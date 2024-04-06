@@ -36,3 +36,4 @@ yarn-error.*
 
 # firebase config files
 firebase.config.ts
+db.config.ts
