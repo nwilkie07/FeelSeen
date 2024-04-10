@@ -15,6 +15,17 @@ import {
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { SafeAreaView } from "react-native-safe-area-context";
+import styled from "styled-components/native";
+
+const S = {
+  TextInput: styled(TextInput)`
+    height: 40px;
+    margin: 8px;
+    padding-left: 8px;
+    background-color: white;
+    border: grey solid 1px;
+  `
+}
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -51,14 +62,12 @@ export const Login = () => {
   return (
     <SafeAreaView style={{display: "flex", flex: 1, backgroundColor: "white", paddingTop: 24}} >
       <KeyboardAvoidingView style={{marginTop: "auto", marginBottom: "auto"}}>
-        <TextInput
-          style={{ height: 40, margin: 8, paddingLeft: 8, backgroundColor: "white", borderColor: "grey", borderStyle: "solid", borderWidth: 1 }}
+        <S.TextInput
           placeholder="Email"
           onChangeText={(text) => setEmail(text)}
           value={email}
         />
-        <TextInput
-          style={{ height: 40, margin: 8, paddingLeft: 8, backgroundColor: "white", borderColor: "grey", borderStyle: "solid", borderWidth: 1  }}
+        <S.TextInput
           placeholder="Password"
           onChangeText={(text) => setPassword(text)}
           value={password}
