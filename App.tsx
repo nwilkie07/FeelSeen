@@ -1,23 +1,34 @@
 import {NavigationContainer} from "@react-navigation/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {StyleSheet, Text, View} from "react-native";
-import {Login} from "./Login";
+import {Login} from "./app/screens/login";
 import {HomeScreen} from "./app/screens/home";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {User, onAuthStateChanged} from "firebase/auth";
 import {FIREBASE_AUTH} from "./firebase.config";
-import {NavigationFooter} from "./app/components/navigation-footer";
+import {connectToDatabase, createTables} from "./database/db";
+import {CreateSymptoms} from "./app/screens/create-symptoms";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
     const [user, setUser] = useState<User | null>(null);
 
+    const loadData = useCallback(async () => {
+        try {
+            const db = await connectToDatabase();
+            await createTables(db)
+        } catch (error) {
+            console.error(error)
+        }
+    }, [])
+
     useEffect(() => {
         onAuthStateChanged(FIREBASE_AUTH, (user) => {
             setUser(user);
         })
-    }, []);
+        loadData().then();
+    }, [loadData]);
 
     return (
         <View style={{display: "flex", height: `${100}%`}}>
@@ -27,18 +38,12 @@ export default function App() {
                         name="Login"
                         component={Login}
                         options={{headerShown: false}}
-                    /> : <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}}/>}
+                    /> : <>
+                        <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}}/>
+                        <Stack.Screen name="Create" component={CreateSymptoms} options={{headerShown: false}}/>
+                    </>}
                 </Stack.Navigator>
             </NavigationContainer>
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#fff",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-});

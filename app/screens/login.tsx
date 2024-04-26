@@ -9,7 +9,7 @@ import {
   Image
 } from "react-native";
 import React, { useState } from "react";
-import { FIREBASE_AUTH } from "./firebase.config";
+import { FIREBASE_AUTH } from "../../firebase.config";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,

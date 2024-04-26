@@ -25,7 +25,6 @@ export const createTables = async (db: SQLiteDatabase) => {
     CREATE TABLE IF NOT EXISTS Symptoms (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
-        description TEXT,
         category TEXT,
         PRIMARY KEY(id)
     )
