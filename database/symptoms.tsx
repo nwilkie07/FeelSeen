@@ -28,6 +28,7 @@ export const getSymptoms = async (db: SQLiteDatabase): Promise<string[]> => {
         const results = await db.executeSql("SELECT name FROM Symptoms")
         results?.forEach((result) => {
             for (let index = 0; index < result.rows.length; index++) {
+                console.log(result.rows.item(index))
                 symptoms.push(result.rows.item(index))
             }
         })

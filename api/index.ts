@@ -1,57 +1,36 @@
 const fs = require('fs');
 const pg = require('pg');
 const url = require('url');
-import {cert, dbHost, dbName, dbPassword, dbPort, dbUser} from "./cert"
+const dbConfig = require('./cert.ts');
 
-const config = {
-    user: dbUser,
-    password: dbPassword,
-    host: dbHost,
-    port: dbPort,
-    database: dbName,
-    ssl: {
-        rejectUnauthorized: true,
-        ca: cert,
-    },
-};
+const Pool = require('pg').Pool;
+const pool = new Pool({
+    user: dbConfig.user,
+    host: dbConfig.host,
+    database: dbConfig.database,
+    password: dbConfig.password,
+    port: dbConfig.port,
+})
 
-const client = new pg.Client(config);
-client.connect(function (err) {
-    if (err)
-        throw err;
-    client.query("SELECT VERSION()", [], function (err, result) {
-        if (err)
-            throw err;
-
-        console.log(result.rows[0].version);
-        client.end(function (err) {
-            if (err)
-                throw err;
-        });
-    });
-});
+const db = require('./symptom-queries.ts')
 
 const express = require('express');
-
 const bodyParser = require('body-parser');
-
 const app = express();
-
-const PORT = process.env.PORT || 5000;
+const port = 3000;
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-// Define your API routes here
+app.get('/', (req, res) => {
+    res.json({ info: 'Node.js, Express, and Postgres API' })
+})
+app.listen(port, () => {
+    console.log(`Listening on ${port}`);
+})
 
-app.listen(PORT, () => {
-
-    console.log(`Server is running on port ${PORT}`);
-
-});
-
-app.get('/api/data', (req, res) => {
-    const data = {
-        message: 'Hello from the API!'
-};
-    res.json(data);
-});
+app.get('/symptoms', db.getSymptoms)
+app.get('/symptoms/:id', db.getSymptomById)
+app.post('/symptoms', db.createSymptom)
+app.put('/symptoms/:id', db.modifySymptom)
+app.delete('/symptoms/:id', db.deleteSymptom)

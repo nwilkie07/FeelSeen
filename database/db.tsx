@@ -1,7 +1,7 @@
 // app/db/db.ts
 import {
     enablePromise,
-    openDatabase, SQLiteDatabase,
+    openDatabase, SQLiteDatabase
 } from "react-native-sqlite-storage"
 
 // Enable promise for SQLite
@@ -11,8 +11,9 @@ type Table = "Symptoms" | "TrackedSymptoms";
 
 export const connectToDatabase = async () => {
     return openDatabase(
-        { name: "feelseen.db", location: "default" },
-        () => {},
+        {name: "feelseen.db", location: "default"},
+        () => {
+        },
         (error) => {
             console.error(error)
             throw Error("Could not connect to database")
@@ -23,15 +24,16 @@ export const connectToDatabase = async () => {
 export const createTables = async (db: SQLiteDatabase) => {
     const symptomQuery = `
     CREATE TABLE IF NOT EXISTS Symptoms (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY,
         name TEXT,
         category TEXT,
         PRIMARY KEY(id)
+        FOREIGN KEY (category)
     )
   `
     const trackerQuery = `
    CREATE TABLE IF NOT EXISTS TrackedSymptoms (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      id INTEGER PRIMARY KEY,
       date datetime NOT NULL,
       symptomId INTEGER,
       severity INTEGER,
@@ -41,9 +43,37 @@ export const createTables = async (db: SQLiteDatabase) => {
       CHECK(severity) BETWEEN 1 AND 10
    )
   `
+
+    const categoryQuery = `
+    CREATE TABLE IF NOT EXISTS SymptomCategory (
+        id INTEGER PRIMARY KEY,
+        color TEXT NOT NULL,
+        name TEXT NOT NULL,
+        )
+    `
     try {
         await db.executeSql(symptomQuery)
         await db.executeSql(trackerQuery)
+        await db.executeSql(categoryQuery)
+    } catch (error) {
+        console.error(error)
+        throw Error(`Failed to create tables`)
+    }
+}
+
+export const insertStartData = async (db: SQLiteDatabase) => {
+    const insertCategories = `
+    INSERT INTO Categories (color, name)
+    VALUES ('red', 'Physical'), ('blue', 'Mental'), ('Green', 'Emotional')`
+
+    const insertSymptoms = `
+    INSERT INTO Symptoms (name, category)
+    VALUES ('Fatigue', 'Physical'), ('Neck Pain', 'Physical'), 
+    ('Depression', 'Mental'), ('Sadness', 'Emotional')`
+
+    try {
+        await db.executeSql(insertCategories)
+        await db.executeSql(insertSymptoms)
     } catch (error) {
         console.error(error)
         throw Error(`Failed to create tables`)

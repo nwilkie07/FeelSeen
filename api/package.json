@@ -13,7 +13,6 @@
     "pg": "^8.11.5",
     "twilio": "^5.0.4"
   },
-  "devDependencies": {},
   "keywords": [],
   "description": ""
 }

@@ -1,5 +1,5 @@
 import {View, Text, Button} from "react-native";
-import React, {useState} from "react";
+import React, {useCallback, useState} from "react";
 import {FIREBASE_AUTH} from "../../firebase.config";
 import {Calendar, ExpandableCalendar, CalendarProvider, DateData} from 'react-native-calendars';
 import {SafeAreaView} from "react-native-safe-area-context";
@@ -7,7 +7,7 @@ import {NavigationFooter} from "../components/navigation-footer";
 import {Symptom} from "../components/symptom-item";
 import {SymptomList} from "./symptom-list";
 import styled from "styled-components/native";
-import {connectToDatabase} from "../../database/db";
+import {connectToDatabase, createTables, insertStartData} from "../../database/db";
 
 const S = {
     Container: styled(View)`

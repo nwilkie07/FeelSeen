@@ -6,7 +6,7 @@ import {HomeScreen} from "./app/screens/home";
 import React, {useCallback, useEffect, useState} from "react";
 import {User, onAuthStateChanged} from "firebase/auth";
 import {FIREBASE_AUTH} from "./firebase.config";
-import {connectToDatabase, createTables} from "./database/db";
+import {connectToDatabase, createTables, getTableNames, insertStartData} from "./database/db";
 import {CreateSymptoms} from "./app/screens/create-symptoms";
 
 const Stack = createNativeStackNavigator();
@@ -18,10 +18,24 @@ export default function App() {
         try {
             const db = await connectToDatabase();
             await createTables(db)
+            await insertStartData(db)
         } catch (error) {
             console.error(error)
         }
     }, [])
+
+    const checkData = useCallback(async () => {
+        try {
+            const db = await connectToDatabase();
+            const n = await getTableNames(db);
+            console.log("Table names", n);
+            return n;
+        } catch (error) {
+            console.error(error)
+        }
+    }, [])
+
+    checkData().then(r => console.log(r));
 
     useEffect(() => {
         onAuthStateChanged(FIREBASE_AUTH, (user) => {

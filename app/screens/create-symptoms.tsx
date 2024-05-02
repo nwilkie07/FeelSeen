@@ -39,6 +39,7 @@ export const CreateSymptoms = () => {
         try {
             const db = await connectToDatabase();
             const symp = await getSymptoms(db);
+            console.log(symp);
             if (symp.length) {
                 setList(symp);
             }
@@ -46,6 +47,8 @@ export const CreateSymptoms = () => {
             console.error(error)
         }
     },[])
+
+    console.log("Symptoms", list);
 
     useEffect(() => {
         getData();

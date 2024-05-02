@@ -25,8 +25,8 @@ const S = {
         display: flex;
         flex-direction: row;
         justify-content: space-around;
-        width: 40%;
-        height: 60px;
+        width: 100%;
+        height: 44px;
         border: black solid 1px;
         border-radius: 16px;
     `,
@@ -35,9 +35,9 @@ const S = {
         align-self: center;
     `,
     ButtonView: styled(View)`
-        display: flex;
-        flex-direction: row;
+        width: 100%;
         padding: 0 8px;
+        gap: 8px;
         justify-content: space-between;
     `,
     Prompt: styled(Text)`
@@ -50,38 +50,59 @@ const S = {
 
     `,
     InputWrapper: styled(View)`
-    display: flex;
-flex-direction: row;
+        display: flex;
+        flex-direction: row;
         justify-content: space-between;
         width: 100%;
-        padding: 8px
+        padding: 8px;
     `,
     TextInput: styled(TextInput)`
         display: flex;
         width: 50%;
-    border: black solid 1px;
+        border: black solid 1px;
+        padding: 4px;
+    `,
+    ModalHeader: styled(Text)`
+        display: flex;
+        align-self: center;
+        padding: 16px;
+        font-weight: bold;
+    `,
+    InputContainer: styled(View)`
+        padding-bottom: 16px;
     `
 }
 
 export const SymptomModal = (props: ModalProps) => {
     const {isOpen, onConfirm, onCancel, confirmText, cancelText, prompt} = props;
 
+    const [name, setName] = React.useState("");
+    const [category, setCategory] = React.useState('');
+    const [color, setColor] = React.useState('');
+
+    const saveSymptom = () => {
+        console.log("%s, %s, %s", name, category, color);
+    }
+
     return <Modal visible={isOpen} onDismiss={onCancel} transparent animationType={"slide"}>
         <S.Content>
-            <S.InputWrapper>
-                <Text>Name</Text>
-                <S.TextInput/>
-            </S.InputWrapper>
-            <S.InputWrapper>
-                <Text>Category</Text>
-                <S.TextInput/>
-            </S.InputWrapper>
+            <S.ModalHeader>Add A Symptom</S.ModalHeader>
+            <S.InputContainer>
+                <S.InputWrapper>
+                    <Text>Name</Text>
+                    <S.TextInput onChangeText={setName} value={name} />
+                </S.InputWrapper>
+                <S.InputWrapper>
+                    <Text>Category</Text>
+                    <S.TextInput onChangeText={setCategory} value={category} />
+                </S.InputWrapper>
                 <S.InputWrapper>
                     <Text>Color</Text>
-                    <S.TextInput/>
+                    <S.TextInput onChangeText={setColor} value={color} />
                 </S.InputWrapper>
+            </S.InputContainer>
             <S.ButtonView>
-                <S.Button onPress={onConfirm} style={{backgroundColor: "whitesmoke"}}>
+                <S.Button onPress={saveSymptom} style={{backgroundColor: "whitesmoke"}}>
                     <S.ButtonText>{confirmText}</S.ButtonText>
                 </S.Button>
                 {cancelText && onCancel && <S.Button onPress={onCancel}>
