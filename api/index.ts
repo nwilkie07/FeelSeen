@@ -1,7 +1,6 @@
 const fs = require('fs');
 const pg = require('pg');
 const url = require('url');
-const dbConfig = require('./cert.ts');
 
 const Pool = require('pg').Pool;
 const pool = new Pool({
